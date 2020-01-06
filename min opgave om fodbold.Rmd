@@ -1,0 +1,181 @@
+---
+title: "Superlige projekt"
+author: "Claus Vestergaard Olesen"
+date: "9/12/2019"
+output: word_document
+---
+
+
+
+
+Install the packages I need to move my data from the internet to R
+
+```{r echo=FALSE}
+library(rvest)
+library(tidyverse)
+library(lubridate)
+library(tidytext)
+```
+
+
+Link for my source for season 2016/17
+
+
+```{r}
+SL1617 <- read_html("http://www.superliga.dk/performance-centre/2016-17")
+
+```
+
+
+
+Find my HTML code for the web site
+
+
+```{r}
+SL1617 %>%
+  html_table()-> SL1617
+```
+
+
+Remove the data I have no use for. Collect the data I need in two tables: klub2 and restenaftabellen
+
+
+```{r}
+SL1617[[1]] -> klub2
+```
+
+
+```{r}
+SL1617[[2]] -> restenaftabellen
+```
+
+
+Gather in a table called SL1617
+
+
+```{r}
+bind_cols(klub2,restenaftabellen) -> SL1617 
+```
+
+
+
+remove upper column  
+
+
+```{r}
+write_csv(SL1617, "SL1617.csv")
+```
+
+
+
+```{r}
+SL1617 <- read_csv("SL1617.csv", skip = 1)
+```
+
+
+
+
+
+
+
+
+```{r}
+ggplot(data = SL1617) +
+ geom_point(mapping = aes(x = Mål, y = Gult))
+```
+
+ 
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Mål, y = Skud, color = Klub)) 
+
+  ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Mål, y = Skud, color = Klub)) 
+```
+  
+  
+
+  
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Rødt, y = Gult, color = Klub)) 
+ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Rødt, y = Gult, color = Klub)) 
+```
+
+
+
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Skud, y = Rødt, color = Klub)) +
+ labs(x = "SL1617")
+
+ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Skud, y = Rødt, color = Klub)) + 
+  labs(x = "SL20172018")
+```
+
+
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Mål, y = SL1617$`Meter løbet`, color = Klub)) +
+ labs(x = "SL1617")
+```
+
+ 
+
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Skud, y = SL1617$`Meter løbet`, color = Klub)) +
+ labs(x = "SL1617")
+
+ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Skud, y = SL20172018$`Meter løbet`, color = Klub)) +
+ labs(x = "SL20172018")
+```
+
+
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Gult, y = SL1617$`Mål imod`, color = Klub)) +
+ labs(x = "SL1617")
+
+ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Gult, y = SL20172018$`Mål imod`, color = Klub)) +
+ labs(x = "SL20172018")
+```
+
+
+
+
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Mål, y = SL1617$`% boldbesiddelse`, color = Klub)) 
+
+ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Mål, y = SL20172018$`% boldbesiddelse`, color = Klub))
+```
+
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Skud, y = SL1617$`% boldbesiddelse`, color = Klub)) 
+
+ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Skud, y = SL20172018$`% boldbesiddelse`, color = Klub))
+```
+
+
+```{r}
+ggplot(data = SL1617) + 
+  geom_point(mapping = aes(x = Skud, y = SL1617$`Meter løbet`, color = Klub)) 
+
+ggplot(data = SL20172018) + 
+  geom_point(mapping = aes(x = Skud, y = SL20172018$`Meter løbet`, color = Klub))
+```
